@@ -1,1 +1,527 @@
-# buyer-profile
+bash
+
+cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buyer Profile — Everyday Real Estate</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#1a1a1a;padding:20px 16px}
+  .wrap{max-width:600px;margin:0 auto;background:#fff;border-radius:12px;padding:24px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  h2{font-size:20px;font-weight:600;margin-bottom:4px}
+  .sub{font-size:13px;color:#666;margin-bottom:24px}
+  .sec{margin:24px 0 12px}
+  .sec-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888}
+  .sec-bar{height:2px;background:#f0f0f0;margin-top:5px}
+  .sec-desc{font-size:12px;color:#999;margin-top:4px}
+  .field{margin-bottom:13px}
+  .field label{display:block;font-size:13px;font-weight:500;color:#555;margin-bottom:5px}
+  .field input,.field select,.field textarea{width:100%;padding:9px 11px;border-radius:8px;border:1px solid #ddd;background:#fff;color:#1a1a1a;font-size:13px;font-family:inherit;outline:none}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:#4f7ef8}
+  .field textarea{resize:vertical;min-height:68px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .opt{font-size:11px;font-weight:400;color:#aaa;margin-left:4px}
+  .q-block{background:#f9f9f9;border-radius:10px;padding:13px 15px;margin-bottom:10px}
+  .q-text{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:8px}
+  .q-sub{font-size:12px;color:#999;margin:-4px 0 8px}
+  .yn{display:flex;gap:6px;flex-wrap:wrap}
+  .yn-btn{flex:1;min-width:80px;padding:8px 4px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:12px;cursor:pointer;color:#666;text-align:center;transition:all .15s}
+  .yn-btn.sy{background:#dcfce7;color:#16a34a;border-color:#86efac;font-weight:600}
+  .yn-btn.sn{background:#fee2e2;color:#dc2626;border-color:#fca5a5;font-weight:600}
+  .yn-btn.so{background:#fef9c3;color:#ca8a04;border-color:#fde047;font-weight:600}
+  .yn-btn.sb{background:#e0e7ff;color:#4338ca;border-color:#a5b4fc;font-weight:600}
+  .note{width:100%;padding:7px 10px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;color:#1a1a1a;font-size:12px;font-family:inherit;margin-top:8px;resize:none;outline:none}
+  .note:focus{border-color:#4f7ef8}
+  .cb-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px}
+  .cb-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:4px}
+  .cb{display:flex;align-items:center;gap:7px;font-size:13px;color:#1a1a1a;cursor:pointer;padding:7px 9px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;transition:all .15s;user-select:none}
+  .cb:hover{background:#f5f5f5}
+  .cb input{width:14px;height:14px;margin:0;flex-shrink:0;cursor:pointer;accent-color:#4f7ef8}
+  .cb.on{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
+  .expand{display:none;margin-top:8px}
+  .expand.show{display:block}
+  .wants-card{background:#f9f9f9;border-radius:10px;padding:13px 15px;margin-bottom:10px}
+  .wc-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:10px}
+  .p-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px}
+  .p-row:last-child{margin-bottom:0}
+  .p-label{flex:1;color:#555}
+  .p-btns{display:flex;gap:4px}
+  .p-btn{padding:4px 12px;border-radius:999px;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;color:#666;transition:all .15s}
+  .p-btn.sn2{background:#dcfce7;color:#16a34a;border-color:#86efac;font-weight:600}
+  .p-btn.sm{background:#fee2e2;color:#dc2626;border-color:#fca5a5;font-weight:600}
+  .internal-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:999px;background:#fef3c7;color:#92400e;margin-left:6px;vertical-align:middle;font-weight:600}
+  .save-btn{width:100%;padding:13px;background:#4f7ef8;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;margin-top:22px;transition:opacity .15s}
+  .save-btn:hover{opacity:.88}
+  .save-btn:disabled{opacity:.5;cursor:default}
+  .status{text-align:center;font-size:13px;margin-top:12px;min-height:20px;color:#666}
+  .status.ok{color:#16a34a;font-weight:500}
+  .status.err{color:#dc2626;font-weight:500}
+  @media(max-width:480px){.row2,.row3{grid-template-columns:1fr}.cb-grid,.cb-grid-3{grid-template-columns:1fr 1fr}.yn{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>Buyer profile — strategy session</h2>
+  <p class="sub">Internal use only. Fill out during the session.</p>
+
+  <!-- CLIENT DETAILS -->
+  <div class="sec"><div class="sec-label">Client details</div><div class="sec-bar"></div></div>
+  <div class="row2">
+    <div class="field"><label>First name</label><input id="firstName" type="text" placeholder="Jane"></div>
+    <div class="field"><label>Last name</label><input id="lastName" type="text" placeholder="Smith"></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Phone</label><input id="phone" type="tel" placeholder="(845) 555-0100"></div>
+    <div class="field"><label>Email</label><input id="email" type="email" placeholder="jane@email.com"></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Occupation</label><input id="occupation" type="text" placeholder="e.g. Nurse, Teacher"></div>
+    <div class="field"><label>Employer</label><input id="employer" type="text" placeholder="Company / org"></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Preferred communication</label>
+      <select id="preferredComm">
+        <option value="">Select…</option>
+        <option>Phone call</option><option>Text message</option><option>Email</option><option>Text then call</option>
+      </select>
+    </div>
+    <div class="field"><label>Best time to reach</label>
+      <select id="bestTimeToReach">
+        <option value="">Select…</option>
+        <option>Morning (8am–12pm)</option><option>Afternoon (12pm–5pm)</option><option>Evening (5pm–8pm)</option><option>Anytime</option>
+      </select>
+    </div>
+  </div>
+  <div class="field"><label>Preferred update frequency</label>
+    <select id="updateFrequency">
+      <option value="">Select…</option>
+      <option>Daily</option><option>Weekly</option><option>As needed</option>
+    </select>
+  </div>
+  <div class="field"><label>Working style preference</label>
+    <select id="workingStyle">
+      <option value="">Select…</option>
+      <option>Hands-on guidance — walk me through everything</option>
+      <option>Independent browsing with check-ins</option>
+      <option>Mix of both</option>
+    </select>
+  </div>
+  <div class="field"><label>Current address</label><input id="currentAddress" type="text" placeholder="Street, City, State, ZIP"></div>
+  <div class="row2">
+    <div class="field"><label>Current situation</label>
+      <select id="currentSituation">
+        <option value="">Select…</option>
+        <option>Renting month-to-month</option><option>Active lease — end date below</option>
+        <option>Own — selling first</option><option>Own — keeping current home</option><option>Living with family</option>
+      </select>
+    </div>
+    <div class="field"><label>Lease end date <span class="opt">if applicable</span></label><input id="leaseEnd" type="text" placeholder="MM/YYYY"></div>
+  </div>
+  <div class="field"><label>Pets <span class="opt">names / types</span></label><input id="pets" type="text" placeholder="e.g. Golden retriever, 2 cats"></div>
+  <div class="field"><label>Who else is part of this decision?</label><input id="decisionMakers" type="text" placeholder="e.g. Spouse, partner, parent"></div>
+
+  <!-- FINANCIAL QUALIFICATION -->
+  <div class="sec"><div class="sec-label">💰 Financial qualification</div><div class="sec-bar"></div></div>
+
+  <div class="q-block">
+    <div class="q-text">Pre-approval status</div>
+    <div class="yn" id="q-preapproval">
+      <button class="yn-btn" onclick="pick('q-preapproval',this,'sn','preApprovalStatus','Not started')">Not started</button>
+      <button class="yn-btn" onclick="pick('q-preapproval',this,'so','preApprovalStatus','In progress')">In progress</button>
+      <button class="yn-btn" onclick="pick('q-preapproval',this,'sy','preApprovalStatus','Pre-approved')">Pre-approved</button>
+      <button class="yn-btn" onclick="pick('q-preapproval',this,'sb','preApprovalStatus','Cash buyer')">Cash buyer</button>
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="field"><label>Lender name <span class="opt">if applicable</span></label><input id="lenderName" type="text" placeholder="e.g. Quicken, local bank"></div>
+    <div class="field"><label>Lender contact</label><input id="lenderContact" type="text" placeholder="Name / phone"></div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Need a lender introduction?</div>
+    <div class="yn" id="q-lender">
+      <button class="yn-btn" onclick="pick('q-lender',this,'sy','needLender','Yes — send intro')">Yes</button>
+      <button class="yn-btn" onclick="pick('q-lender',this,'sn','needLender','No — has one')">No</button>
+    </div>
+  </div>
+
+  <div class="field"><label>Loan type</label>
+    <select id="loanType">
+      <option value="">Select…</option>
+      <option>Conventional</option><option>FHA</option><option>VA</option><option>USDA</option><option>Cash</option><option>Unsure</option>
+    </select>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Comfortable monthly payment</label><input id="monthlyPayment" type="text" placeholder="e.g. $2,500/mo"></div>
+    <div class="field"><label>Estimated down payment</label><input id="downPayment" type="text" placeholder="e.g. $40,000 / 10%"></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Min price</label><input id="minPrice" type="text" placeholder="$250,000"></div>
+    <div class="field"><label>Max price</label><input id="maxPrice" type="text" placeholder="$500,000"></div>
+  </div>
+
+  <!-- TIMELINE & URGENCY -->
+  <div class="sec"><div class="sec-label">⏳ Timeline & urgency</div><div class="sec-bar"></div></div>
+
+  <div class="field"><label>Ideal purchase timeline</label>
+    <select id="purchaseTimeline">
+      <option value="">Select…</option>
+      <option>0–3 months</option><option>3–6 months</option><option>6–12 months</option><option>12+ months</option>
+    </select>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Timeline flexibility</div>
+    <div class="yn" id="q-flex">
+      <button class="yn-btn" onclick="pick('q-flex',this,'sn','timelineFlexibility','Firm — must move by date')">Firm</button>
+      <button class="yn-btn" onclick="pick('q-flex',this,'so','timelineFlexibility','Somewhat flexible')">Somewhat flexible</button>
+      <button class="yn-btn" onclick="pick('q-flex',this,'sy','timelineFlexibility','Just exploring')">Just exploring</button>
+    </div>
+  </div>
+
+  <div class="field"><label>Is anything forcing this move?</label><input id="forcingMove" type="text" placeholder="e.g. Lease ending March, job relocation, family change"></div>
+
+  <!-- DECISION-MAKING & BEHAVIOR -->
+  <div class="sec"><div class="sec-label">🧠 Decision-making & behavior</div><div class="sec-bar"></div></div>
+
+  <div class="q-block">
+    <div class="q-text">Have you purchased a home before?</div>
+    <div class="yn" id="q-firsttime">
+      <button class="yn-btn" onclick="pick('q-firsttime',this,'sy','firstTimeBuyer','No — first time buyer')">No — first time</button>
+      <button class="yn-btn" onclick="pick('q-firsttime',this,'sn','firstTimeBuyer','Yes — purchased before')">Yes — purchased before</button>
+    </div>
+  </div>
+
+  <div class="field"><label>Buyer type</label>
+    <select id="buyerType">
+      <option value="">Select…</option>
+      <option>First-time buyer</option><option>Move-up buyer</option><option>Downsizing</option><option>Investor</option><option>Relocating</option>
+    </select>
+  </div>
+
+  <div class="field"><label>Intended use</label>
+    <select id="intendedUse">
+      <option value="">Select…</option>
+      <option>Primary residence</option><option>Investment / rental</option><option>Second home / vacation</option>
+    </select>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">If we find the right home, are you prepared to make an offer quickly?</div>
+    <div class="yn" id="q-offerready">
+      <button class="yn-btn" onclick="pick('q-offerready',this,'sy','offerReadiness','Yes — ready to move')">Yes — ready</button>
+      <button class="yn-btn" onclick="pick('q-offerready',this,'so','offerReadiness','Depends on the home')">Depends</button>
+      <button class="yn-btn" onclick="pick('q-offerready',this,'sn','offerReadiness','No — need more time')">No — need time</button>
+    </div>
+  </div>
+
+  <div class="field"><label>What would hold you back from making an offer?</label><textarea id="offerHoldback" placeholder="Price, condition, timing, spouse approval, etc."></textarea></div>
+  <div class="field"><label>How many homes do you expect to see before deciding? <span class="opt">optional</span></label>
+    <select id="homesToSee">
+      <option value="">Select…</option>
+      <option>1–3 (I'll know it when I see it)</option><option>4–10</option><option>10–20</option><option>As many as it takes</option>
+    </select>
+  </div>
+
+  <div class="field"><label>Why is this move important to you?</label><textarea id="motivationWhy" placeholder="Their deeper reason — family, stability, investment, life change…"></textarea></div>
+  <div class="field"><label>What does the perfect outcome look like?</label><textarea id="perfectOutcome" placeholder="What does winning look like for this buyer?"></textarea></div>
+
+  <!-- REPRESENTATION & PROTECTION -->
+  <div class="sec"><div class="sec-label">📄 Representation & protection <span class="internal-badge">internal</span></div><div class="sec-bar"></div></div>
+
+  <div class="q-block">
+    <div class="q-text">Are they currently working with another agent?</div>
+    <div class="yn" id="q-otheragent">
+      <button class="yn-btn" onclick="pick('q-otheragent',this,'sn','workingWithAgent','Yes — has another agent')">Yes</button>
+      <button class="yn-btn" onclick="pick('q-otheragent',this,'sy','workingWithAgent','No — unrepresented')">No</button>
+    </div>
+    <textarea class="note" id="agentNotes" rows="1" placeholder="Notes if yes…"></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Have they signed a buyer agreement before?</div>
+    <div class="yn" id="q-agreedbefore">
+      <button class="yn-btn" onclick="pick('q-agreedbefore',this,'sy','signedBefore','Yes')">Yes</button>
+      <button class="yn-btn" onclick="pick('q-agreedbefore',this,'sn','signedBefore','No — first time')">No — first time</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Buyer agreement status <span class="internal-badge">internal</span></div>
+    <div class="yn" id="q-agreementstatus">
+      <button class="yn-btn" onclick="pick('q-agreementstatus',this,'sn','agreementStatus','Not sent')">Not sent</button>
+      <button class="yn-btn" onclick="pick('q-agreementstatus',this,'so','agreementStatus','Sent — awaiting signature')">Sent</button>
+      <button class="yn-btn" onclick="pick('q-agreementstatus',this,'sy','agreementStatus','Signed')">Signed</button>
+    </div>
+  </div>
+
+  <!-- SEARCH CRITERIA -->
+  <div class="sec"><div class="sec-label">🏡 Search criteria — needs</div><div class="sec-bar"></div></div>
+  <div class="row3">
+    <div class="field"><label>Min sq ft</label><input id="minSqft" type="text" placeholder="1,200"></div>
+    <div class="field"><label>Max sq ft</label><input id="maxSqft" type="text" placeholder="2,800"></div>
+    <div class="field"><label>Lot size <span class="opt">acres</span></label><input id="lotSize" type="text" placeholder="0.25+"></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Bedrooms</label><select id="bedrooms"><option value="">Select…</option><option>2+</option><option>3+</option><option>4+</option><option>5+</option></select></div>
+    <div class="field"><label>Bathrooms</label><select id="bathrooms"><option value="">Select…</option><option>1+</option><option>1.5+</option><option>2+</option><option>3+</option></select></div>
+  </div>
+
+  <!-- UNIT MIX -->
+  <div class="sec"><div class="sec-label">🏠 Bedroom & layout — unit mix</div><div class="sec-bar"></div></div>
+
+  <div class="q-block">
+    <div class="q-text">Master bedroom on the first floor?</div>
+    <div class="yn" id="q-master">
+      <button class="yn-btn" onclick="pick('q-master',this,'sy','masterBedroom','Yes — required')">Yes — required</button>
+      <button class="yn-btn" onclick="pick('q-master',this,'so','masterBedroom','Preferred')">Preferred</button>
+      <button class="yn-btn" onclick="pick('q-master',this,'sn','masterBedroom','No preference')">No preference</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Single-level living (ranch / one floor)?</div>
+    <div class="q-sub">Accessibility, aging in place, or lifestyle preference.</div>
+    <div class="yn" id="q-single">
+      <button class="yn-btn" onclick="pick('q-single',this,'sy','singleLevel','Yes — required')">Yes — required</button>
+      <button class="yn-btn" onclick="pick('q-single',this,'so','singleLevel','Open to it')">Open to it</button>
+      <button class="yn-btn" onclick="pick('q-single',this,'sn','singleLevel','No preference')">No preference</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Open to condos or townhomes?</div>
+    <div class="q-sub">HOA fees, shared walls, no private yard.</div>
+    <div class="yn" id="q-condo">
+      <button class="yn-btn" onclick="pick('q-condo',this,'sy','openToCondo','Yes — open')">Yes</button>
+      <button class="yn-btn" onclick="pick('q-condo',this,'so','openToCondo','Maybe — needs discussion')">Maybe</button>
+      <button class="yn-btn" onclick="pick('q-condo',this,'sn','openToCondo','No — single family only')">No</button>
+    </div>
+    <textarea class="note" id="condoNotes" rows="1" placeholder="HOA comfort, shared walls, yard needs…"></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Do they understand condo / townhome ownership?</div>
+    <div class="q-sub">HOA dues, restrictions, no private outdoor space.</div>
+    <div class="yn" id="q-condoaware">
+      <button class="yn-btn" onclick="pick('q-condoaware',this,'sy','condoAwareness','Yes — fully aware')">Yes — fully aware</button>
+      <button class="yn-btn" onclick="pick('q-condoaware',this,'so','condoAwareness','Needs walkthrough')">Needs walkthrough</button>
+      <button class="yn-btn" onclick="pick('q-condoaware',this,'sn','condoAwareness','No — explain it')">No — explain it</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Open to multi-family?</div>
+    <div class="q-sub">House-hacking, rental income, in-law suite, investment potential.</div>
+    <div class="yn" id="q-mf">
+      <button class="yn-btn" onclick="pick('q-mf',this,'sy','openToMultiFamily','Yes — interested');showEl('mf-detail',true)">Yes</button>
+      <button class="yn-btn" onclick="pick('q-mf',this,'so','openToMultiFamily','Maybe — open');showEl('mf-detail',true)">Maybe</button>
+      <button class="yn-btn" onclick="pick('q-mf',this,'sn','openToMultiFamily','No');showEl('mf-detail',false)">No</button>
+    </div>
+    <div class="expand" id="mf-detail">
+      <select id="multiFamilyUnits" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;color:#1a1a1a;font-size:12px;font-family:inherit;margin-top:8px;outline:none">
+        <option value="">Unit mix preference…</option>
+        <option>2-family (duplex)</option><option>3-family</option><option>4-family</option><option>Any — flexible</option>
+      </select>
+      <textarea class="note" id="mfNotes" rows="1" placeholder="Live in one unit? Investment only? Landlord experience?…"></textarea>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Home style — select all that apply</label>
+    <div class="cb-grid">
+      <label class="cb"><input type="checkbox" value="Traditional" onchange="toggleCb(this)"> Traditional</label>
+      <label class="cb"><input type="checkbox" value="Colonial" onchange="toggleCb(this)"> Colonial</label>
+      <label class="cb"><input type="checkbox" value="Contemporary" onchange="toggleCb(this)"> Contemporary</label>
+      <label class="cb"><input type="checkbox" value="Open floor plan" onchange="toggleCb(this)"> Open floor plan</label>
+      <label class="cb"><input type="checkbox" value="Ranch / one floor" onchange="toggleCb(this)"> Ranch / one floor</label>
+      <label class="cb"><input type="checkbox" value="Split level" onchange="toggleCb(this)"> Split level</label>
+      <label class="cb"><input type="checkbox" value="Single family" onchange="toggleCb(this)"> Single family</label>
+      <label class="cb"><input type="checkbox" value="Condo" onchange="toggleCb(this)"> Condo</label>
+      <label class="cb"><input type="checkbox" value="Townhome" onchange="toggleCb(this)"> Townhome</label>
+      <label class="cb"><input type="checkbox" value="Multi-family" onchange="toggleCb(this)"> Multi-family</label>
+      <label class="cb"><input type="checkbox" value="New construction" onchange="toggleCb(this)"> New construction</label>
+    </div>
+  </div>
+
+  <!-- PROPERTY REALITY CHECKS -->
+  <div class="sec"><div class="sec-label">🔍 Property reality checks</div><div class="sec-bar"></div></div>
+
+  <div class="q-block">
+    <div class="q-text">Open to homes needing work?</div>
+    <div class="yn" id="q-work">
+      <button class="yn-btn" onclick="pick('q-work',this,'sy','openToWork','Yes — open to fixer')">Yes — fixer OK</button>
+      <button class="yn-btn" onclick="pick('q-work',this,'so','openToWork','Light cosmetic only')">Light cosmetic only</button>
+      <button class="yn-btn" onclick="pick('q-work',this,'sn','openToWork','No — move-in ready only')">No — move-in ready</button>
+    </div>
+  </div>
+
+  <div class="field"><label>Age of home comfort level</label>
+    <select id="homeAge">
+      <option value="">Select…</option>
+      <option>New construction preferred</option><option>10–20 years</option><option>20–40 years</option><option>Older OK — character homes welcome</option><option>No preference</option>
+    </select>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Deal sensitivity</div>
+    <div class="q-sub">Set expectations early.</div>
+    <div style="margin-bottom:8px">
+      <div style="font-size:12px;color:#555;margin-bottom:5px;font-weight:500">Comfortable with competing offers?</div>
+      <div class="yn" id="q-competing">
+        <button class="yn-btn" onclick="pick('q-competing',this,'sy','competingOffers','Yes — comfortable')">Yes</button>
+        <button class="yn-btn" onclick="pick('q-competing',this,'so','competingOffers','Nervous but willing')">Nervous but willing</button>
+        <button class="yn-btn" onclick="pick('q-competing',this,'sn','competingOffers','No — wants exclusive')">No</button>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:12px;color:#555;margin-bottom:5px;font-weight:500">Comfortable going over asking price?</div>
+      <div class="yn" id="q-overasking">
+        <button class="yn-btn" onclick="pick('q-overasking',this,'sy','overAsking','Yes — willing to go over')">Yes</button>
+        <button class="yn-btn" onclick="pick('q-overasking',this,'so','overAsking','Depends on the home')">Depends</button>
+        <button class="yn-btn" onclick="pick('q-overasking',this,'sn','overAsking','No — at asking max')">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCATION -->
+  <div class="sec"><div class="sec-label">📍 Location & flexibility</div><div class="sec-bar"></div></div>
+
+  <div class="field"><label>Preferred towns / areas</label><input id="preferredTowns" type="text" placeholder="e.g. Wallkill, Newburgh, Montgomery"></div>
+
+  <div class="q-block">
+    <div class="q-text">Open to nearby towns for better value?</div>
+    <div class="yn" id="q-nearbytowns">
+      <button class="yn-btn" onclick="pick('q-nearbytowns',this,'sy','openToNearbyTowns','Yes — flexible')">Yes — flexible</button>
+      <button class="yn-btn" onclick="pick('q-nearbytowns',this,'so','openToNearbyTowns','Maybe — show me')">Maybe</button>
+      <button class="yn-btn" onclick="pick('q-nearbytowns',this,'sn','openToNearbyTowns','No — specific town only')">No — specific only</button>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">Must stay in a specific town?</div>
+    <div class="yn" id="q-specifictown">
+      <button class="yn-btn" onclick="pick('q-specifictown',this,'sn','mustStayInTown','Yes — non-negotiable')">Yes — non-negotiable</button>
+      <button class="yn-btn" onclick="pick('q-specifictown',this,'sy','mustStayInTown','No — open to options')">No — open</button>
+    </div>
+    <textarea class="note" id="townNotes" rows="1" placeholder="Which town and why?"></textarea>
+  </div>
+
+  <div class="field"><label>Max commute time tolerance</label>
+    <select id="maxCommute">
+      <option value="">Select…</option>
+      <option>Under 15 min</option><option>15–30 min</option><option>30–45 min</option><option>45–60 min</option><option>60+ min OK</option><option>Work from home — not a factor</option>
+    </select>
+  </div>
+
+  <div class="field"><label>Preferred school districts</label><input id="preferredDistricts" type="text" placeholder="e.g. Warwick Valley, Valley Central"></div>
+  <div class="field"><label>Towns / districts to avoid</label><input id="townsToAvoid" type="text" placeholder="Any hard no's?"></div>
+  <div class="field"><label>Deal breakers</label><textarea id="dealBreakers" placeholder="Anything that immediately disqualifies a home…"></textarea></div>
+
+  <!-- WANTS -->
+  <div class="sec"><div class="sec-label">✅ Wants — nice to have vs. must have</div><div class="sec-bar"></div></div>
+
+  <div class="wants-card">
+    <div class="wc-title">Outdoor & property</div>
+    <div class="p-row"><span class="p-label">Garage</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','garage')">Nice</button><button class="p-btn" onclick="pw(this,'must','garage')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Fenced yard</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','fencedYard')">Nice</button><button class="p-btn" onclick="pw(this,'must','fencedYard')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Pool</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','pool')">Nice</button><button class="p-btn" onclick="pw(this,'must','pool')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Large lot / land</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','largeLot')">Nice</button><button class="p-btn" onclick="pw(this,'must','largeLot')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Deck / patio</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','deckPatio')">Nice</button><button class="p-btn" onclick="pw(this,'must','deckPatio')">Must</button></div></div>
+  </div>
+
+  <div class="wants-card">
+    <div class="wc-title">Interior features</div>
+    <div class="p-row"><span class="p-label">Updated kitchen</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','updatedKitchen')">Nice</button><button class="p-btn" onclick="pw(this,'must','updatedKitchen')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Home office / flex room</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','homeOffice')">Nice</button><button class="p-btn" onclick="pw(this,'must','homeOffice')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Finished basement</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','finishedBasement')">Nice</button><button class="p-btn" onclick="pw(this,'must','finishedBasement')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Mudroom / laundry room</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','mudroomLaundry')">Nice</button><button class="p-btn" onclick="pw(this,'must','mudroomLaundry')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Open concept living</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','openConcept')">Nice</button><button class="p-btn" onclick="pw(this,'must','openConcept')">Must</button></div></div>
+  </div>
+
+  <div class="wants-card">
+    <div class="wc-title">Location & lifestyle</div>
+    <div class="p-row"><span class="p-label">Close to highway / commute</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','highway')">Nice</button><button class="p-btn" onclick="pw(this,'must','highway')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Walkable to town / shops</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','walkable')">Nice</button><button class="p-btn" onclick="pw(this,'must','walkable')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Quiet / rural setting</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','quietRural')">Nice</button><button class="p-btn" onclick="pw(this,'must','quietRural')">Must</button></div></div>
+    <div class="p-row"><span class="p-label">Move-in ready</span><div class="p-btns"><button class="p-btn" onclick="pw(this,'nice','moveInReady')">Nice</button><button class="p-btn" onclick="pw(this,'must','moveInReady')">Must</button></div></div>
+  </div>
+
+  <div class="field" style="margin-top:8px"><label>Additional notes</label><textarea id="additionalNotes" placeholder="Anything else that came up in conversation…"></textarea></div>
+
+  <button class="save-btn" onclick="saveProfile()">Save buyer profile → Google Sheets</button>
+  <div class="status" id="status"></div>
+</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbw2QA7HYnuUlnjShik2NuWBssB_PoELyFssL7UCk33woQEqC_hD0JkWg3vtNzRCqiZ9/exec';
+const vals={};
+function pick(gid,btn,cls,key,val){document.querySelectorAll('#'+gid+' .yn-btn').forEach(b=>b.classList.remove('sy','sn','so','sb'));btn.classList.add(cls);vals[key]=val;}
+function pw(btn,type,key){const bs=btn.closest('.p-btns').querySelectorAll('.p-btn');bs.forEach(b=>b.classList.remove('sn2','sm'));btn.classList.add(type==='nice'?'sn2':'sm');vals[key]=type==='nice'?'Nice to have':'Must have';}
+function toggleCb(el){el.closest('.cb').classList.toggle('on',el.checked);}
+function showEl(id,show){document.getElementById(id).classList.toggle('show',show);}
+function g(id){const el=document.getElementById(id);return el?el.value:'';}
+function getStyles(){return Array.from(document.querySelectorAll('#style-grid input:checked')).map(i=>i.value).join(', ');}
+async function saveProfile(){
+  const btn=document.querySelector('.save-btn');
+  const status=document.getElementById('status');
+  btn.disabled=true;btn.textContent='Saving…';status.className='status';status.textContent='';
+  const data={
+    firstName:g('firstName'),lastName:g('lastName'),phone:g('phone'),email:g('email'),
+    occupation:g('occupation'),employer:g('employer'),
+    preferredComm:g('preferredComm'),bestTimeToReach:g('bestTimeToReach'),
+    updateFrequency:g('updateFrequency'),workingStyle:g('workingStyle'),
+    currentAddress:g('currentAddress'),currentSituation:g('currentSituation'),leaseEnd:g('leaseEnd'),
+    pets:g('pets'),decisionMakers:g('decisionMakers'),
+    preApprovalStatus:vals.preApprovalStatus||'',lenderName:g('lenderName'),lenderContact:g('lenderContact'),
+    needLender:vals.needLender||'',loanType:g('loanType'),
+    monthlyPayment:g('monthlyPayment'),downPayment:g('downPayment'),
+    minPrice:g('minPrice'),maxPrice:g('maxPrice'),
+    purchaseTimeline:g('purchaseTimeline'),timelineFlexibility:vals.timelineFlexibility||'',
+    forcingMove:g('forcingMove'),
+    firstTimeBuyer:vals.firstTimeBuyer||'',buyerType:g('buyerType'),intendedUse:g('intendedUse'),
+    offerReadiness:vals.offerReadiness||'',offerHoldback:g('offerHoldback'),
+    homesToSee:g('homesToSee'),motivationWhy:g('motivationWhy'),perfectOutcome:g('perfectOutcome'),
+    workingWithAgent:vals.workingWithAgent||'',agentNotes:g('agentNotes'),
+    signedBefore:vals.signedBefore||'',agreementStatus:vals.agreementStatus||'',
+    minSqft:g('minSqft'),maxSqft:g('maxSqft'),lotSize:g('lotSize'),
+    bedrooms:g('bedrooms'),bathrooms:g('bathrooms'),
+    masterBedroom:vals.masterBedroom||'',singleLevel:vals.singleLevel||'',
+    openToCondo:vals.openToCondo||'',condoAwareness:vals.condoAwareness||'',
+    openToMultiFamily:vals.openToMultiFamily||'',multiFamilyUnits:g('multiFamilyUnits'),
+    homeStyles:Array.from(document.querySelectorAll('.cb-grid input:checked')).map(i=>i.value).join(', '),
+    openToWork:vals.openToWork||'',homeAge:g('homeAge'),
+    competingOffers:vals.competingOffers||'',overAsking:vals.overAsking||'',
+    preferredTowns:g('preferredTowns'),openToNearbyTowns:vals.openToNearbyTowns||'',
+    mustStayInTown:vals.mustStayInTown||'',townNotes:g('townNotes'),
+    maxCommute:g('maxCommute'),preferredDistricts:g('preferredDistricts'),
+    townsToAvoid:g('townsToAvoid'),dealBreakers:g('dealBreakers'),
+    garage:vals.garage||'',fencedYard:vals.fencedYard||'',pool:vals.pool||'',
+    largeLot:vals.largeLot||'',deckPatio:vals.deckPatio||'',
+    updatedKitchen:vals.updatedKitchen||'',homeOffice:vals.homeOffice||'',
+    finishedBasement:vals.finishedBasement||'',mudroomLaundry:vals.mudroomLaundry||'',
+    openConcept:vals.openConcept||'',highway:vals.highway||'',walkable:vals.walkable||'',
+    quietRural:vals.quietRural||'',moveInReady:vals.moveInReady||'',
+    additionalNotes:g('additionalNotes')
+  };
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    status.className='status ok';status.textContent='Saved to Google Sheets.';btn.textContent='Saved!';
+  }catch(err){
+    status.className='status err';status.textContent='Error — check your connection and try again.';
+    btn.textContent='Save buyer profile → Google Sheets';btn.disabled=false;
+  }
+}
+</script>
+</body>
+</html>
+HTMLEOF
+echo "Done"
+Output
+
+Done
